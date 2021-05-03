@@ -11,7 +11,7 @@ environment:
 install:
   - git clone --depth 1 https://github.com/strukturag/libde265-data.git
 
-build_script:
+before_build:
   - mkdir build
   - cd build
   - cmake .. -A %arch%
