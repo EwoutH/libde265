@@ -12,9 +12,12 @@ install:
   - git clone --depth 1 https://github.com/strukturag/libde265-data.git
 
 build_script:
-  - ps: if($env:PLATFORM -eq "x64") { $env:CMAKE_GEN_SUFFIX=" Win64" }
-  - cmake -A %arch% -H. -Bbuild
-  - cmake --build build --config %CONFIGURATION%
+  - mkdir build
+  - cd build
+  - cmake .. -A %arch%
+
+build:
+  verbosity: normal
 
 before_test:
   - copy /y build\dec265\%CONFIGURATION%\dec265.exe build
