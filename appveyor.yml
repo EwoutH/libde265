@@ -1,31 +1,19 @@
 # stats available at
 # https://ci.appveyor.com/project/strukturag/libde265
-version: 1.0.{build}
-
-os:
-  - Windows Server 2012 R2
+image: Visual Studio 2019
+configuration: Release
 
 environment:
   matrix:
-    - GENERATOR: "Visual Studio 11 2012"
-    - GENERATOR: "Visual Studio 12 2013"
-
-platform:
-  - x86
-  - x64
-
-configuration:
-  - Debug
-
-build:
-  verbosity: normal
+  - arch: x64
+  - arch: arm64
 
 install:
-  - git clone https://github.com/strukturag/libde265-data.git
+  - git clone --depth 1 https://github.com/strukturag/libde265-data.git
 
 build_script:
   - ps: if($env:PLATFORM -eq "x64") { $env:CMAKE_GEN_SUFFIX=" Win64" }
-  - cmake "-G%GENERATOR%%CMAKE_GEN_SUFFIX%" -H. -Bbuild
+  - cmake -A %arch% -H. -Bbuild
   - cmake --build build --config %CONFIGURATION%
 
 before_test:
@@ -41,3 +29,4 @@ test_script:
 
 artifacts:
   - path: build
+  - path: build\**\Release\*.exe
